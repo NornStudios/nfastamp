@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <circle cx="160" cy="160" r="148" fill="#B8322F" stroke="#1C1B19" stroke-width="10"/>
+  <circle cx="160" cy="160" r="118" fill="none" stroke="#FFFBF5" stroke-width="4" stroke-dasharray="10 8"/>
+  <text x="160" y="148" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="700" font-size="42" fill="#FFFBF5" letter-spacing="0.12em">NFA</text>
+  <text x="160" y="188" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="600" font-size="14" fill="#E8A09A" letter-spacing="0.2em">HOUSE EDGE 5%</text>
+</svg>
