@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react'
+import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { Connect, Plugin } from 'vite'
 import { defineConfig } from 'vite'
 
@@ -12,8 +13,8 @@ function num(v: unknown): number | null {
 }
 
 async function handlePrice(
-  _req: Connect.IncomingMessage,
-  res: Connect.ServerResponse,
+  _req: IncomingMessage,
+  res: ServerResponse,
   next: Connect.NextFunction,
 ) {
   try {
