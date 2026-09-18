@@ -391,6 +391,10 @@
   pointer-events: none;
 }
 
+.arc-stage .ink-bloom {
+  pointer-events: none;
+}
+
 .arc-stage.show-sticker .sticker-slap {
   animation: slap 0.55s cubic-bezier(0.2, 1.2, 0.3, 1) forwards;
 }
@@ -459,6 +463,8 @@
 }
 
 .arc-cta {
+  position: relative;
+  z-index: 2;
   width: 100%;
   margin-top: 0.5rem;
   min-height: 3.1rem;
@@ -491,6 +497,15 @@
   padding: 1rem;
   box-shadow: 6px 6px 0 var(--stamp);
   animation: fade-up 0.25s ease both;
+}
+
+.arc-sheet--modal {
+  position: relative;
+  z-index: 41;
+  width: min(24rem, 100%);
+  margin: 0;
+  box-shadow: 10px 10px 0 var(--stamp);
+  animation: sticker-pop 0.35s cubic-bezier(0.2, 1.1, 0.3, 1) both;
 }
 
 .arc-sheet h2 {

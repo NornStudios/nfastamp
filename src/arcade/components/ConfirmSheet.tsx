@@ -26,20 +26,31 @@ export function ConfirmSheet({
     ? [...lines, ...edgeSplitConfirmLines()]
     : lines
   return (
-    <div className="arc-sheet" role="dialog" aria-label={title}>
-      <h2>{title}</h2>
-      <div className="arc-sheet__body">
-        {body.map((l) => (
-          <div key={l}>{l}</div>
-        ))}
-      </div>
-      <div className="arc-sheet__actions">
-        <button type="button" onClick={onCancel}>
-          {cancel}
-        </button>
-        <button type="button" className="go" onClick={onConfirm}>
-          {cta}
-        </button>
+    <div
+      className="arc-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      onClick={onCancel}
+    >
+      <div
+        className="arc-sheet arc-sheet--modal"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <h2>{title}</h2>
+        <div className="arc-sheet__body">
+          {body.map((l) => (
+            <div key={l}>{l}</div>
+          ))}
+        </div>
+        <div className="arc-sheet__actions">
+          <button type="button" onClick={onCancel}>
+            {cancel}
+          </button>
+          <button type="button" className="go" onClick={onConfirm}>
+            {cta}
+          </button>
+        </div>
       </div>
     </div>
   )
