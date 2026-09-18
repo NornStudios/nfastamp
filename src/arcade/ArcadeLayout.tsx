@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link, NavLink, Outlet } from 'react-router-dom'
+import { PriceTicker } from '../components/PriceTicker'
 import { ChipProvider, useChips } from './ChipContext'
 import { DemoBanner } from './components/EdgeChrome'
 import './arcade.css'
@@ -15,6 +16,7 @@ function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="arc-page">
+      <PriceTicker />
       <div className="arc-shell">
         <header className="arc-top">
           <Link className="arc-top__brand" to="/arcade">

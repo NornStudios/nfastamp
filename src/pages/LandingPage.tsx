@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PriceTicker } from '../components/PriceTicker'
 import { LINKS, PONS_CTA } from '../config'
 
 const ROADMAP = [
@@ -61,6 +62,8 @@ export default function LandingPage() {
   return (
     <div className="page">
       <div className="paper-grain" aria-hidden="true" />
+
+      <PriceTicker />
 
       <header className="top">
         <a className="brand" href="#top" id="top">

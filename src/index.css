@@ -57,6 +57,123 @@ code {
   overflow-x: clip;
 }
 
+/* —— NFA price ticker (top of site) —— */
+.price-ticker {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: stretch;
+  min-height: 2.35rem;
+  border-bottom: 3px solid var(--ink);
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-seal);
+  overflow: hidden;
+}
+
+.price-ticker__pin {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.4rem 0.85rem;
+  background: var(--stamp);
+  border-right: 3px solid var(--ink);
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.price-ticker__pin:hover {
+  background: color-mix(in srgb, var(--stamp) 85%, var(--white));
+}
+
+.price-ticker__sym {
+  opacity: 0.9;
+}
+
+.price-ticker__price {
+  font-size: 0.9rem;
+}
+
+.price-ticker__chg {
+  font-size: 0.68rem;
+  opacity: 0.85;
+}
+
+.price-ticker__chg.up {
+  color: color-mix(in srgb, var(--chart) 70%, var(--white));
+  opacity: 1;
+}
+
+.price-ticker__chg.down {
+  color: var(--stamp-soft);
+  opacity: 1;
+}
+
+.price-ticker__rail {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.price-ticker__track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 28s linear infinite;
+}
+
+.price-ticker__seq {
+  display: flex;
+  gap: 2rem;
+  padding: 0 1.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0.88;
+}
+
+.price-ticker__seq span::after {
+  content: ' ·';
+  margin-left: 2rem;
+  opacity: 0.45;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .price-ticker__track {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .price-ticker__pin {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.7rem;
+    gap: 0.4rem;
+  }
+
+  .price-ticker__seq {
+    font-size: 0.65rem;
+  }
+}
+
 .paper-grain {
   pointer-events: none;
   position: fixed;
