@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stamp Flip · NFA Arcade (DEMO)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;700&family=IBM+Plex+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #e8e2d4;
+        --paper-deep: #d4cdb8;
+        --ink: #1c1b19;
+        --ink-mute: #5c574e;
+        --stamp: #b8322f;
+        --stamp-soft: #e8a09a;
+        --chart: #1f7a4c;
+        --white: #fffbf5;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        font-family: "IBM Plex Sans", system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 20% 0%, color-mix(in srgb, var(--stamp-soft) 40%, transparent), transparent 45%),
+          radial-gradient(circle at 90% 10%, color-mix(in srgb, var(--paper-deep) 90%, transparent), transparent 40%),
+          var(--paper);
+      }
+      .wrap {
+        max-width: 420px;
+        margin: 0 auto;
+        padding: 1.25rem 1rem 3rem;
+      }
+      .demo {
+        display: inline-block;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.75rem;
+        letter-spacing: 0.04em;
+        background: var(--ink);
+        color: var(--white);
+        padding: 0.25rem 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+      h1 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 2.25rem;
+        margin: 0 0 0.35rem;
+        line-height: 1.05;
+      }
+      .lede {
+        color: var(--ink-mute);
+        margin: 0 0 1rem;
+      }
+      .edge {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+        font-size: 0.9rem;
+        border: 2px solid var(--ink);
+        background: var(--white);
+        padding: 0.55rem 0.75rem;
+        margin-bottom: 1.25rem;
+      }
+      .pad {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        border: 6px solid var(--ink);
+        background: var(--stamp);
+        display: grid;
+        place-items: center;
+        margin: 0 auto 1.25rem;
+        width: min(240px, 70vw);
+        box-shadow: 0 12px 0 color-mix(in srgb, var(--ink) 18%, transparent);
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+      .pad.slam {
+        animation: slam 0.55s ease;
+      }
+      .pad.blank {
+        background: var(--paper-deep);
+      }
+      .pad.inked {
+        background: var(--stamp);
+      }
+      .pad span {
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+        font-size: 2.5rem;
+        color: var(--white);
+        letter-spacing: 0.08em;
+      }
+      .pad.blank span {
+        color: var(--ink-mute);
+        font-size: 1.1rem;
+        letter-spacing: 0.12em;
+      }
+      @keyframes slam {
+        0% {
+          transform: translateY(-28px) scale(1.05);
+        }
+        55% {
+          transform: translateY(8px) scale(0.96);
+        }
+        100% {
+          transform: translateY(0) scale(1);
+        }
+      }
+      label {
+        display: block;
+        font-size: 0.8rem;
+        color: var(--ink-mute);
+        margin-bottom: 0.35rem;
+      }
+      .row {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
+      .row button,
+      .cta {
+        font: inherit;
+        cursor: pointer;
+        border: 2px solid var(--ink);
+        background: var(--white);
+        color: var(--ink);
+        padding: 0.7rem 0.85rem;
+        flex: 1;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+      }
+      .row button.active {
+        background: var(--ink);
+        color: var(--white);
+      }
+      input[type="range"] {
+        width: 100%;
+        margin-bottom: 0.35rem;
+      }
+      .stake-read {
+        font-family: "IBM Plex Mono", monospace;
+        margin-bottom: 1rem;
+      }
+      .cta {
+        width: 100%;
+        background: var(--stamp);
+        color: var(--white);
+        border-color: var(--ink);
+        font-size: 1.05rem;
+        margin-top: 0.25rem;
+      }
+      .cta:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+      .sheet {
+        display: none;
+        margin-top: 1rem;
+        border: 2px solid var(--ink);
+        background: var(--white);
+        padding: 0.9rem;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+      .sheet.open {
+        display: block;
+      }
+      .sheet h2 {
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 1.2rem;
+        margin: 0 0 0.5rem;
+      }
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+      }
+      .actions button {
+        flex: 1;
+        font: inherit;
+        font-family: "IBM Plex Mono", monospace;
+        font-weight: 700;
+        border: 2px solid var(--ink);
+        padding: 0.65rem;
+        cursor: pointer;
+      }
+      .actions .go {
+        background: var(--stamp);
+        color: var(--white);
+      }
+      .result {
+        min-height: 3rem;
+        margin-top: 1rem;
+        font-family: "Fraunces", Georgia, serif;
+        font-size: 1.35rem;
+      }
+      .result.win {
+        color: var(--chart);
+      }
+      .fun {
+        margin-top: 1.5rem;
+        font-size: 0.85rem;
+        color: var(--ink-mute);
+      }
+      a.back {
+        color: var(--ink);
+        font-size: 0.85rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="demo">DEMO — fake chips, real attitude</div>
+      <p><a class="back" href="/">← nfastamp.fun</a></p>
+      <h1>Stamp Flip</h1>
+      <p class="lede">Ink or blank. One slam. House keeps five.</p>
+      <div class="edge">House edge 5% — shown before you play</div>
+
+      <div id="pad" class="pad" aria-hidden="true"><span>NFA</span></div>
+
+      <label>Currency</label>
+      <div class="row" id="currency">
+        <button type="button" class="active" data-c="NFA">NFA</button>
+        <button type="button" data-c="USDC">USDC</button>
+      </div>
+
+      <label for="stake">Stake</label>
+      <input id="stake" type="range" min="1" max="100" value="10" />
+      <div class="stake-read"><span id="stakeVal">10</span> <span id="asset">NFA</span></div>
+
+      <label>Side</label>
+      <div class="row" id="side">
+        <button type="button" class="active" data-s="INK">INK</button>
+        <button type="button" data-s="BLANK">BLANK</button>
+      </div>
+
+      <button class="cta" id="open" type="button">Slam check</button>
+
+      <div class="sheet" id="sheet" role="dialog" aria-label="Slam check">
+        <h2>Slam check</h2>
+        <div id="sheetBody"></div>
+        <div class="actions">
+          <button type="button" id="cancel">Not today</button>
+          <button type="button" class="go" id="slam">Slam it</button>
+        </div>
+      </div>
+
+      <div class="result" id="result"></div>
+      <p class="fun">Entertainment only. You can lose. NFA.</p>
+    </div>
+    <script>
+      const state = { currency: "NFA", side: "INK", stake: 10, busy: false };
+
+      const pad = document.getElementById("pad");
+      const stake = document.getElementById("stake");
+      const stakeVal = document.getElementById("stakeVal");
+      const asset = document.getElementById("asset");
+      const sheet = document.getElementById("sheet");
+      const sheetBody = document.getElementById("sheetBody");
+      const result = document.getElementById("result");
+
+      document.querySelectorAll("#currency button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#currency button").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.currency = btn.dataset.c;
+          asset.textContent = state.currency;
+        });
+      });
+
+      document.querySelectorAll("#side button").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#side button").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          state.side = btn.dataset.s;
+        });
+      });
+
+      stake.addEventListener("input", () => {
+        state.stake = Number(stake.value);
+        stakeVal.textContent = String(state.stake);
+      });
+
+      document.getElementById("open").addEventListener("click", () => {
+        if (state.busy) return;
+        const payout = (state.stake * 1.9).toFixed(2);
+        sheetBody.innerHTML = `
+          Stake: ${state.stake} ${state.currency}<br/>
+          Side: ${state.side}<br/>
+          Win pays: 1.90× → ${payout} ${state.currency}<br/>
+          House edge: 5%<br/>
+          Lose: stake → 70% treasury / 30% burn
+        `;
+        sheet.classList.add("open");
+      });
+
+      document.getElementById("cancel").addEventListener("click", () => {
+        sheet.classList.remove("open");
+      });
+
+      document.getElementById("slam").addEventListener("click", () => {
+        if (state.busy) return;
+        state.busy = true;
+        sheet.classList.remove("open");
+        result.textContent = "Stamping…";
+        result.className = "result";
+        pad.classList.remove("blank", "inked", "slam");
+        void pad.offsetWidth;
+        pad.classList.add("slam");
+        pad.querySelector("span").textContent = "…";
+
+        // Demo RNG — browser Math.random. Fake chips.
+        const outcome = Math.random() < 0.5 ? "INK" : "BLANK";
+        window.setTimeout(() => {
+          const win = outcome === state.side;
+          pad.classList.toggle("blank", outcome === "BLANK");
+          pad.classList.toggle("inked", outcome === "INK");
+          pad.querySelector("span").textContent = outcome === "INK" ? "NFA" : "BLANK";
+          if (win) {
+            const payout = (state.stake * 1.9).toFixed(2);
+            result.className = "result win";
+            result.textContent = `INKED. +${payout} ${state.currency} · Still NFA.`;
+          } else {
+            result.className = "result";
+            result.textContent = "Blank. Thanks for the snack. House edge was 5%. You saw it.";
+          }
+          state.busy = false;
+        }, 600);
+      });
+    </script>
+  </body>
+</html>

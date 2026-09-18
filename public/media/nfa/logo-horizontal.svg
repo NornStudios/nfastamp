@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 160" role="img" aria-label="NFA horizontal logo">
+  <title>NFA — Not Financial Advice</title>
+  <g transform="translate(24,16)">
+    <circle cx="64" cy="64" r="54" fill="#E8E2D4"/>
+    <circle cx="64" cy="64" r="54" fill="none" stroke="#1C1B19" stroke-width="8"/>
+    <circle cx="64" cy="64" r="44" fill="none" stroke="#B8322F" stroke-width="2"/>
+    <text x="64" y="74" text-anchor="middle" font-family="IBM Plex Mono, Space Mono, Courier New, monospace" font-size="32" font-weight="700" letter-spacing="2" fill="#B8322F">NFA</text>
+  </g>
+  <text x="168" y="78" font-family="IBM Plex Mono, Space Mono, Courier New, monospace" font-size="56" font-weight="700" letter-spacing="3" fill="#1C1B19">NFA</text>
+  <text x="172" y="112" font-family="Fraunces, Source Serif 4, Georgia, serif" font-size="18" font-weight="500" fill="#5C574E">Not Financial Advice</text>
+</svg>
