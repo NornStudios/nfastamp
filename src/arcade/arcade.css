@@ -85,6 +85,13 @@
   border-bottom-color: var(--stamp);
 }
 
+.arc-top__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
 .arc-demo {
   display: inline-block;
   margin: 1rem 0 0.5rem;
@@ -634,6 +641,13 @@
   margin: 0 0 1rem;
   font-family: var(--font-seal);
   font-size: 0.9rem;
+}
+
+.arc-overlay__quip {
+  font-style: italic;
+  color: var(--ink-mute);
+  font-size: 0.82rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
 .arc-overlay__actions {

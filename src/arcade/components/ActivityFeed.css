@@ -1,0 +1,129 @@
+.activity-feed {
+  padding: 0.85rem;
+  border: 3px solid var(--ink);
+  background: var(--paper-deep);
+  box-shadow: 4px 4px 0 var(--ink);
+}
+
+.activity-feed__header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px dashed color-mix(in srgb, var(--ink) 20%, transparent);
+}
+
+.activity-feed__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--stamp);
+  animation: feed-pulse 1.5s ease infinite;
+}
+
+.activity-feed__title {
+  font-family: var(--font-seal);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.activity-feed__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.activity-feed__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-family: var(--font-seal);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: var(--ink-mute);
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.activity-feed__item.new {
+  opacity: 1;
+  animation: feed-slide 0.4s ease;
+}
+
+.activity-feed__item--big_win {
+  color: var(--chart);
+  opacity: 1;
+  font-weight: 600;
+}
+
+.activity-feed__item--achievement {
+  color: var(--stamp);
+}
+
+.activity-feed__icon {
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+}
+
+.activity-feed__msg {
+  flex: 1;
+}
+
+.activity-ticker {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--ink);
+  color: var(--white);
+  border: 3px solid var(--stamp);
+  font-family: var(--font-seal);
+  font-size: 0.7rem;
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+  max-width: 300px;
+}
+
+.activity-ticker.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.activity-ticker__icon {
+  flex-shrink: 0;
+}
+
+.activity-ticker__msg {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@keyframes feed-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes feed-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
