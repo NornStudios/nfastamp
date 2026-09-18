@@ -16,7 +16,7 @@ function nfaPriceDevApi(): Plugin {
   return {
     name: 'nfa-price-dev-api',
     configureServer(server) {
-      server.middlewares.use('/api/nfa-price', (req, res, next) => {
+      server.middlewares.use('/api/nfa-price', (_req, res, next) => {
         void (async () => {
           try {
             const html = await fetch(PONS, {
@@ -49,7 +49,7 @@ function nfaPriceDevApi(): Plugin {
       })
     },
     configurePreviewServer(server) {
-      server.middlewares.use('/api/nfa-price', (req, res, next) => {
+      server.middlewares.use('/api/nfa-price', (_req, res, next) => {
         void (async () => {
           try {
             const html = await fetch(PONS, {
