@@ -1,7 +1,12 @@
 import { Link } from 'react-router-dom'
 import { EdgeBanner, FunOnly, TreasuryCopy } from './components/EdgeChrome'
 import { GAMES } from './games'
-import { isUnlocked, getUnlockAt } from './dripSchedule'
+import {
+  getGameStatus,
+  getUnlockAt,
+  statusLabel,
+  type GameStatus,
+} from './dripSchedule'
 
 const STICKERS = [
   'wink.png',
@@ -10,6 +15,16 @@ const STICKERS = [
   'stamp-slam.png',
   'shrug.png',
 ] as const
+
+function metaStatus(status: GameStatus, id: (typeof GAMES)[number]['id']): string {
+  if (status === 'locked') {
+    return `Locked · ${new Date(getUnlockAt(id)).toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+    })}`
+  }
+  return statusLabel(status)
+}
 
 export function ArcadeHome() {
   return (
@@ -47,7 +62,8 @@ export function ArcadeHome() {
 
       <div className="arc-grid">
         {GAMES.map((g, i) => {
-          const open = isUnlocked(g.id)
+          const status = getGameStatus(g.id)
+          const open = status !== 'locked'
           const sticker = STICKERS[i % STICKERS.length]
           const body = (
             <>
@@ -57,31 +73,43 @@ export function ArcadeHome() {
                 alt=""
                 aria-hidden
               />
+              <span className={`arc-tile__badge arc-tile__badge--${status}`}>
+                {statusLabel(status)}
+              </span>
               <span className="arc-tile__rank">No. {g.rank}</span>
               <h2>{g.title}</h2>
               <p>{g.lede}</p>
               <div className="arc-tile__meta">
                 <span>Edge {g.edgeLabel}</span>
-                <span>
-                  {open
-                    ? 'Open'
-                    : `Locked · ${new Date(getUnlockAt(g.id)).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}`}
-                </span>
+                <span>{metaStatus(status, g.id)}</span>
               </div>
             </>
           )
           if (!open) {
             return (
-              <div key={g.id} className="arc-tile locked" aria-disabled>
+              <div
+                key={g.id}
+                className="arc-tile locked"
+                aria-disabled
+              >
                 {body}
-                <strong style={{ fontFamily: 'var(--font-seal)', fontSize: '0.75rem' }}>
+                <strong
+                  style={{
+                    fontFamily: 'var(--font-seal)',
+                    fontSize: '0.75rem',
+                  }}
+                >
                   Coming soon — stamp&apos;s not dry
                 </strong>
               </div>
             )
           }
           return (
-            <Link key={g.id} className="arc-tile" to={`/arcade/${g.id}`}>
+            <Link
+              key={g.id}
+              className={`arc-tile arc-tile--${status}`}
+              to={`/arcade/${g.id}`}
+            >
               {body}
             </Link>
           )

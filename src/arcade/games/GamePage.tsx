@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { Navigate, useParams } from 'react-router-dom'
 import { LockedGate } from '../components/LockedGate'
-import type { GameId } from '../dripSchedule'
+import { getGameStatus, statusLabel, type GameId } from '../dripSchedule'
 import { getGame } from '../games'
 import { CosmeticsClosetGame } from './CosmeticsCloset'
 import { DisclaimerWheelGame } from './DisclaimerWheel'
@@ -34,6 +34,21 @@ export function GamePage() {
 
   const id = meta.id
   const render = MAP[id]
+  const status = getGameStatus(id)
 
-  return <LockedGate id={id}>{render()}</LockedGate>
+  return (
+    <LockedGate id={id}>
+      {status !== 'locked' ? (
+        <p
+          className={`arc-status-ribbon arc-status-ribbon--${status}`}
+          role="status"
+        >
+          {status === 'demo' ? 'Current demo — ink still wet' : 'Live on the floor'}
+          <span aria-hidden> · </span>
+          {statusLabel(status)}
+        </p>
+      ) : null}
+      {render()}
+    </LockedGate>
+  )
 }

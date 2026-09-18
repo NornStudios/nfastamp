@@ -260,6 +260,66 @@
   cursor: default;
 }
 
+.arc-tile--demo {
+  outline: 3px solid var(--stamp);
+  outline-offset: -1px;
+}
+
+.arc-tile--live {
+  box-shadow: 6px 6px 0 color-mix(in srgb, var(--ink) 28%, transparent);
+}
+
+.arc-tile__badge {
+  align-self: flex-start;
+  padding: 0.2rem 0.45rem;
+  border: 2px solid var(--ink);
+  font-family: var(--font-seal);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(-1.5deg);
+}
+
+.arc-tile__badge--demo {
+  background: var(--stamp);
+  color: var(--white);
+}
+
+.arc-tile__badge--live {
+  background: var(--ink);
+  color: var(--white);
+}
+
+.arc-tile__badge--locked {
+  background: var(--paper-deep);
+  color: var(--ink-mute);
+}
+
+.arc-status-ribbon {
+  display: inline-block;
+  margin: 0.75rem 0 0.25rem;
+  padding: 0.35rem 0.7rem;
+  border: 3px solid var(--ink);
+  font-family: var(--font-seal);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  box-shadow: 3px 3px 0 var(--ink);
+  transform: rotate(-1deg);
+}
+
+.arc-status-ribbon--demo {
+  background: var(--stamp);
+  color: var(--white);
+}
+
+.arc-status-ribbon--live {
+  background: var(--ink);
+  color: var(--white);
+}
+
 .arc-tile__rank {
   font-family: var(--font-seal);
   font-size: 0.68rem;
@@ -388,6 +448,10 @@
   width: 42%;
   opacity: 0;
   z-index: 3;
+  pointer-events: none;
+}
+
+.arc-stage .ink-bloom {
   pointer-events: none;
 }
 

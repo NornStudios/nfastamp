@@ -1,6 +1,7 @@
 /**
  * Drip unlock schedule — generated once with seed 0x4efa2026 (mulberry32).
  * Public UI unlocks when Date.now() >= unlockAt.
+ * Status ladder: locked → demo (newest unlock) → live (when the next demo drops).
  * See docs/arcade-drip-schedule.md
  */
 
@@ -18,6 +19,9 @@ export type GameId =
   | 'tip-the-house'
   | 'cosmetics-closet'
   | 'high-score-slam'
+
+/** locked = not yet; demo = current drip feature; live = prior unlock superseded by a newer demo */
+export type GameStatus = 'locked' | 'demo' | 'live'
 
 export interface DripEntry {
   id: GameId
@@ -87,11 +91,62 @@ export function getUnlockAt(id: GameId): string {
   return byId[id].unlockAt
 }
 
+export function getScheduleIndex(id: GameId): number {
+  return DRIP_SCHEDULE.findIndex((e) => e.id === id)
+}
+
+/**
+ * - locked: now < unlockAt
+ * - demo: unlocked and no later game has unlocked yet (one current demo)
+ * - live: unlocked and a later game has already unlocked as the new demo
+ */
+export function getGameStatus(
+  id: GameId,
+  now: number = Date.now(),
+): GameStatus {
+  const idx = getScheduleIndex(id)
+  if (idx < 0) return 'locked'
+  if (now < Date.parse(DRIP_SCHEDULE[idx].unlockAt)) return 'locked'
+  const next = DRIP_SCHEDULE[idx + 1]
+  if (next && now >= Date.parse(next.unlockAt)) return 'live'
+  return 'demo'
+}
+
 export function isUnlocked(
   id: GameId,
   now: number = Date.now(),
 ): boolean {
-  return now >= Date.parse(getUnlockAt(id))
+  return getGameStatus(id, now) !== 'locked'
+}
+
+export function isPlayable(
+  id: GameId,
+  now: number = Date.now(),
+): boolean {
+  return isUnlocked(id, now)
+}
+
+/** Newest unlocked game (the current demo), or null if none unlocked. */
+export function getCurrentDemoId(
+  now: number = Date.now(),
+): GameId | null {
+  for (let i = DRIP_SCHEDULE.length - 1; i >= 0; i--) {
+    if (now >= Date.parse(DRIP_SCHEDULE[i].unlockAt)) {
+      return DRIP_SCHEDULE[i].id
+    }
+  }
+  return null
+}
+
+export function statusLabel(status: GameStatus): string {
+  switch (status) {
+    case 'locked':
+      return 'Coming soon'
+    case 'demo':
+      return 'Demo'
+    case 'live':
+      return 'Live'
+  }
 }
 
 export function msUntilUnlock(
