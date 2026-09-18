@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import type { Plugin } from 'vite'
+import type { Connect, Plugin } from 'vite'
 import { defineConfig } from 'vite'
 
 const CA = '0x4E26Fc35985037Fd30E2e7aFb0d37695b7E58D62'
@@ -11,75 +11,48 @@ function num(v: unknown): number | null {
   return Number.isFinite(n) ? n : null
 }
 
+async function handlePrice(
+  _req: Connect.IncomingMessage,
+  res: Connect.ServerResponse,
+  next: Connect.NextFunction,
+) {
+  try {
+    const html = await fetch(PONS, {
+      headers: { 'user-agent': 'nfastamp-ticker/1.0' },
+    }).then((r) => r.text())
+    const priceMatch = html.match(/<dt>Price<\/dt><dd>\$([0-9.,]+)<\/dd>/i)
+    const mcapMatch = html.match(
+      /<dt>Market cap<\/dt><dd>\$([0-9.,]+)<\/dd>/i,
+    )
+    const priceUsd = priceMatch ? num(priceMatch[1]) : null
+    const body = JSON.stringify({
+      symbol: 'NFA',
+      priceUsd,
+      marketCapUsd: mcapMatch ? num(mcapMatch[1]) : null,
+      change24h: null,
+      source: priceUsd != null ? 'pons' : 'none',
+      market: 'Bonding curve',
+      href: PONS,
+      updatedAt: Date.now(),
+    })
+    res.statusCode = 200
+    res.setHeader('Content-Type', 'application/json')
+    res.end(body)
+  } catch (e) {
+    next(e as Error)
+  }
+}
+
 /** Local / preview stand-in for Vercel `/api/nfa-price`. */
 function nfaPriceDevApi(): Plugin {
   return {
     name: 'nfa-price-dev-api',
     configureServer(server) {
-      server.middlewares.use('/api/nfa-price', (_req, res, next) => {
-        void (async () => {
-          try {
-            const html = await fetch(PONS, {
-              headers: { 'user-agent': 'nfastamp-ticker/1.0' },
-            }).then((r) => r.text())
-            const priceMatch = html.match(
-              /<dt>Price<\/dt><dd>\$([0-9.,]+)<\/dd>/i,
-            )
-            const mcapMatch = html.match(
-              /<dt>Market cap<\/dt><dd>\$([0-9.,]+)<\/dd>/i,
-            )
-            const priceUsd = priceMatch ? num(priceMatch[1]) : null
-            const body = JSON.stringify({
-              symbol: 'NFA',
-              priceUsd,
-              marketCapUsd: mcapMatch ? num(mcapMatch[1]) : null,
-              change24h: null,
-              source: priceUsd != null ? 'pons' : 'none',
-              market: 'Bonding curve',
-              href: PONS,
-              updatedAt: Date.now(),
-            })
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.end(body)
-          } catch (e) {
-            next(e as Error)
-          }
-        })()
-      })
+      server.middlewares.use('/api/nfa-price', handlePrice)
     },
     configurePreviewServer(server) {
-      server.middlewares.use('/api/nfa-price', (_req, res, next) => {
-        void (async () => {
-          try {
-            const html = await fetch(PONS, {
-              headers: { 'user-agent': 'nfastamp-ticker/1.0' },
-            }).then((r) => r.text())
-            const priceMatch = html.match(
-              /<dt>Price<\/dt><dd>\$([0-9.,]+)<\/dd>/i,
-            )
-            const mcapMatch = html.match(
-              /<dt>Market cap<\/dt><dd>\$([0-9.,]+)<\/dd>/i,
-            )
-            const priceUsd = priceMatch ? num(priceMatch[1]) : null
-            const body = JSON.stringify({
-              symbol: 'NFA',
-              priceUsd,
-              marketCapUsd: mcapMatch ? num(mcapMatch[1]) : null,
-              change24h: null,
-              source: priceUsd != null ? 'pons' : 'none',
-              market: 'Bonding curve',
-              href: PONS,
-              updatedAt: Date.now(),
-            })
-            res.statusCode = 200
-            res.setHeader('Content-Type', 'application/json')
-            res.end(body)
-          } catch (e) {
-            next(e as Error)
-          }
-        })()
-      })
+      // Register before SPA fallback so /api is not rewritten to index.html
+      server.middlewares.use('/api/nfa-price', handlePrice)
     },
   }
 }

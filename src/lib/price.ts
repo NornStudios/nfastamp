@@ -103,10 +103,14 @@ export async function fetchDexQuote(): Promise<NfaPriceQuote | null> {
 
 export async function fetchApiQuote(): Promise<NfaPriceQuote | null> {
   try {
-    const res = await fetch('/api/nfa-price', { headers: { accept: 'application/json' } })
+    const res = await fetch('/api/nfa-price', {
+      headers: { accept: 'application/json' },
+    })
     if (!res.ok) return null
+    const ctype = res.headers.get('content-type') || ''
+    if (!ctype.includes('application/json')) return null
     const q = (await res.json()) as NfaPriceQuote
-    if (!q || q.source === 'none') return null
+    if (!q || q.source === 'none' || q.priceUsd == null) return null
     return q
   } catch {
     return null
