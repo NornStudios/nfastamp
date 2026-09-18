@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useChips } from '../ChipContext'
+import { useStats } from '../StatsContext'
 import { WIN_MULTIPLIER, simulateEdgeSnack } from '../economy'
 import { ChipSelector } from '../components/ChipSelector'
 import { ConfirmSheet } from '../components/ConfirmSheet'
 import { EdgeBanner, FunOnly, TreasuryCopy } from '../components/EdgeChrome'
 import { WinLoseOverlay } from '../components/WinLoseOverlay'
+import { StreakTracker } from '../components/StreakTracker'
+import { launchConfetti } from '../confetti'
+import { getWinQuip, getLoseQuip } from '../slogans'
 
 type Side = 'INK' | 'BLANK'
 
@@ -14,6 +18,7 @@ type Props = {
   lede?: string
   inkLabel?: string
   blankLabel?: string
+  gameId?: string
 }
 
 export function StampFlipGame({
@@ -21,8 +26,10 @@ export function StampFlipGame({
   lede = 'Ink or blank. One slam. House keeps five.',
   inkLabel = 'INK',
   blankLabel = 'BLANK',
+  gameId = 'stamp-flip',
 }: Props) {
   const { balance, asset, setAsset, debit, credit } = useChips()
+  const { recordPlay, updateBalance } = useStats()
   const [stake, setStake] = useState(10)
   const [side, setSide] = useState<Side>('INK')
   const [sheet, setSheet] = useState(false)
@@ -33,6 +40,7 @@ export function StampFlipGame({
     win: boolean
     headline: string
     detail: string
+    quip: string
   } | null>(null)
 
   function openSheet() {
@@ -56,19 +64,34 @@ export function StampFlipGame({
     window.setTimeout(() => {
       setStage(outcome === 'INK' ? 'inked' : 'blank')
       setShowSticker(true)
+      
       if (win) {
         const payout = +(stake * WIN_MULTIPLIER).toFixed(2)
         credit(payout)
+        recordPlay(gameId, stake, true, payout)
+        updateBalance(balance - stake + payout)
+        
+        if (payout >= 100) {
+          launchConfetti('big')
+        } else if (payout >= 50) {
+          launchConfetti('normal')
+        }
+        
         setResult({
           win: true,
           headline: 'INKED!',
-          detail: `+${payout} ${asset} · Still NFA. Edge snack simulated: ${snack.buyback} buyback / ${snack.treasury} treasury.`,
+          detail: `+${payout} ${asset} · Edge snack: ${snack.buyback} buyback / ${snack.treasury} treasury.`,
+          quip: getWinQuip(),
         })
       } else {
+        recordPlay(gameId, stake, false, 0)
+        updateBalance(balance - stake)
+        
         setResult({
           win: false,
           headline: blankLabel === 'SINK' ? 'SUNK.' : 'Blank.',
-          detail: `Thanks for the snack. House edge was 5%. Split demo: ${snack.buyback} buyback · ${snack.treasury} treasury.`,
+          detail: `House edge 5%. Split: ${snack.buyback} buyback · ${snack.treasury} treasury.`,
+          quip: getLoseQuip(),
         })
       }
       setBusy(false)
@@ -87,6 +110,7 @@ export function StampFlipGame({
         </div>
         <h1>{title}</h1>
         <p className="lede">{lede}</p>
+        <StreakTracker />
       </div>
 
       <EdgeBanner compact />
@@ -164,6 +188,7 @@ export function StampFlipGame({
         win={result?.win ?? null}
         headline={result?.headline ?? ''}
         detail={result?.detail}
+        quip={result?.quip}
         onAgain={() => {
           setResult(null)
           setStage('idle')

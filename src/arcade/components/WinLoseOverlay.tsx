@@ -4,6 +4,7 @@ type Props = {
   win: boolean | null
   headline: string
   detail?: string
+  quip?: string
   onAgain: () => void
   onClose: () => void
 }
@@ -14,6 +15,7 @@ export function WinLoseOverlay({
   win,
   headline,
   detail,
+  quip,
   onAgain,
   onClose,
 }: Props) {
@@ -31,7 +33,8 @@ export function WinLoseOverlay({
       >
         <img className="arc-overlay__deco" src={deco} alt="" aria-hidden />
         <h2>{headline}</h2>
-        {detail ? <p>{detail}</p> : null}
+        {quip && <p className="arc-overlay__quip">"{quip}"</p>}
+        {detail && <p>{detail}</p>}
         <div className="arc-overlay__actions">
           <button type="button" className="btn btn--ghost" onClick={onClose}>
             Close

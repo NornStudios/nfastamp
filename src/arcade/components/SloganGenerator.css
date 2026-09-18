@@ -1,0 +1,147 @@
+.slogan-gen {
+  padding: 1rem;
+  border: 4px solid var(--ink);
+  background: var(--white);
+  box-shadow: 5px 5px 0 var(--stamp);
+  text-align: center;
+}
+
+.slogan-gen__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.slogan-gen__title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.slogan-gen__display {
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 3px dashed var(--ink);
+  background: var(--paper);
+  font-family: var(--font-seal);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.slogan-gen__display.spinning {
+  animation: slot-blur 0.15s linear infinite;
+}
+
+.slogan-gen__display p {
+  margin: 0;
+}
+
+.slogan-gen__btn {
+  width: 100%;
+  padding: 0.65rem;
+  border: 3px solid var(--ink);
+  background: var(--stamp);
+  color: var(--white);
+  font-family: var(--font-seal);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.slogan-gen__btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.slogan-gen__btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.madlib-gen {
+  padding: 1rem;
+  border: 4px solid var(--ink);
+  background: var(--paper);
+  box-shadow: 5px 5px 0 var(--ink);
+  text-align: center;
+}
+
+.madlib-gen__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.madlib-gen__title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.madlib-gen__result {
+  padding: 0.75rem;
+  margin-bottom: 0.75rem;
+  border: 2px solid var(--ink);
+  background: var(--white);
+  font-family: var(--font-seal);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.madlib-gen__result p {
+  margin: 0;
+}
+
+.madlib-gen__btn {
+  padding: 0.55rem 1rem;
+  border: 3px solid var(--ink);
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-seal);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--stamp);
+}
+
+.slogan-banner {
+  padding: 0.5rem 0.75rem;
+  background: var(--ink);
+  color: var(--white);
+  font-family: var(--font-seal);
+  font-size: 0.72rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.slogan-banner__text {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.slogan-banner__tap {
+  font-size: 0.6rem;
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+@keyframes slot-blur {
+  0%, 100% { filter: blur(0px); }
+  50% { filter: blur(2px); }
+}
