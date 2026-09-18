@@ -391,10 +391,6 @@
   pointer-events: none;
 }
 
-.arc-stage .ink-bloom {
-  pointer-events: none;
-}
-
 .arc-stage.show-sticker .sticker-slap {
   animation: slap 0.55s cubic-bezier(0.2, 1.2, 0.3, 1) forwards;
 }
