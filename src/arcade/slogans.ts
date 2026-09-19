@@ -73,7 +73,7 @@ export const DISCLAIMER_MADLIBS = [
 
 export function generateMadlib(): string {
   const template = DISCLAIMER_MADLIBS[Math.floor(Math.random() * DISCLAIMER_MADLIBS.length)]
-  let result = template.template
+  let result: string = template.template
 
   if ('nouns' in template) {
     const noun1 = template.nouns[Math.floor(Math.random() * template.nouns.length)]
